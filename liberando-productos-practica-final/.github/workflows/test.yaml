@@ -1,32 +1,28 @@
+name: Testing
+
 on:
-  pull_request:
-    branches:
-      - '*'
   push:
     branches:
-      - '*'
+      - main  # Cambia esto al nombre de tu rama principal si es diferente
 
-env:
-  PYTHON_VERSION: '3.8.12'
-
-name: Test
 jobs:
-  unit-tests:
+  test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
+          python-version: 3.8  # Cambia esto a tu versión de Python
 
-      - name: Upgrade pip
-        run: pip3 install --upgrade pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Install python dependencies
-        run: pip3 install -r requirements.txt
-
-      - name: Run unit-tests
-        run: pytest --cov
+      - name: Run tests
+        run: |
+          pytest
