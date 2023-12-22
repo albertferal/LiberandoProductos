@@ -13,6 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: List files in the directory
+        run: ls -la
+
+      - name: Print current directory
+        run: pwd
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -24,5 +30,4 @@ jobs:
           pip install -r liberando-productos-practica-final/requirements.txt
 
       - name: Run tests
-        run: |
-          pytest liberando-productos-practica-final/src/tests/
+        run: pytest
