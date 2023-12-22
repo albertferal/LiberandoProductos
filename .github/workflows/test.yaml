@@ -31,3 +31,9 @@ jobs:
 
       - name: Run tests
         run: pytest
+
+      - name: Run tests&coverage
+        run: pytest --cov
+      
+      - name: Run tests&coverage report
+        run: pytest --cov --cov-report=html
