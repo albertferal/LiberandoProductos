@@ -17,16 +17,16 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Docker Login to GHCR
+      - name: Get the version to publish
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/v}
+
+      - name: Docker Login to GHCR with Personal Access Token
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }} # Usar el token de GitHub para autenticación
-
-      - name: Get the version to publish
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/v}
+          password: ${{ secrets.GHCR_TOKEN }} # Utiliza el nuevo token personal aquí
 
       - name: Build and push Docker image to GHCR
         run: |
