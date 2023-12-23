@@ -204,7 +204,7 @@ Es posible ejecutar los tests de diferentes formas:
 
 ## Practica a realizar
 
-Comprobamos que todo el entorno funcione correctamente:
+### Comprobamos que todo el entorno funcione correctamente:
 1. Activamos el entorno virtual, en este caso al estar en windows usamos el script:
     ```sh
      source venv/Scripts/activate
@@ -252,7 +252,7 @@ Comprobamos que todo el entorno funcione correctamente:
 
 Una vez comprobado todo y a partir de ello, es necesario realizar una serie de mejoras:
 
-Los requirimientos son los siguientes:
+### Mejorando el proyecto (Inicio de la práctica)
 
 - Añadir por lo menos un nuevo endpoint a los existentes `/` y `/health`, un ejemplo sería `/bye` que devolvería `{"msg": "Bye Bye"}`, para ello será necesario añadirlo en el fichero [src/application/app.py](./src/application/app.py)
   - Hemos añadido el endpoint `/bye`, el cual da un mensaje en http://localhost:8081/bye `{"msg": "Bye, have a nice day"}`
@@ -268,8 +268,14 @@ Los requirimientos son los siguientes:
 
 - Creación de pipelines de CI/CD en cualquier plataforma (Github Actions, Jenkins, etc) que cuenten por lo menos con las siguientes fases:
 
-  - Testing: tests unitarios con cobertura. Se dispone de un [ejemplo con Github Actions en el repositorio actual](./.github/workflows/test.yaml)
+  - Testing: tests unitarios con cobertura. --> ['Testing pipeline'](.github\workflows\test.yaml)
 
+  <p float="left">
+  <img src="Screenshots/6-pipelinetesting1.jpg" width="500" />
+  <img src="Screenshots/6-pipelinetesting2.jpg" width="500" /> 
+</p>
+
+  ![Pipelinetesting1](Screenshots/6-pipelinetesting1.jpg) ![Pipelinetesting2](Screenshots/6-pipelinetesting2.jpg)
   - Build & Push: creación de imagen docker y push de la misma a cualquier registry válido que utilice alguna estrategia de release para los tags de las vistas en clase, se recomienda GHCR ya incluido en los repositorios de Github. Se dispone de un [ejemplo con Github Actions en el repositorio actual](./.github/workflows/release.yaml)
 
 - Configuración de monitorización y alertas:
