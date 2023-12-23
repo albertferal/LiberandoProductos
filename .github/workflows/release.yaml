@@ -12,23 +12,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Unshallow
-        run: git fetch --prune --unshallow
+      # Otros pasos según sea necesario
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Docker Login to GHCR
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }} # Usar el token de GitHub para autenticación
 
       - name: Get the version to publish
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/v}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Docker Login in GHCR
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }} # Utiliza el secreto GHCR_TOKEN aquí
-
-      - name: Build and push Docker image
-        run: make -C liberando-productos-practica-final publish VERSION=${{ steps.get_version.outputs.VERSION }}
-
+      - name: Build and push Docker image to GHCR
+        run: |
+          docker build -t ghcr.io/albertferal/LiberandoProductos:${{ steps.get_version.outputs.VERSION }} .
+          docker push ghcr.io/albertferal/LiberandoProductos:${{ steps.get_version.outputs.VERSION }}
