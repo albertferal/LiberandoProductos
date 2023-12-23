@@ -30,4 +30,5 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }} # Utiliza el secreto GHCR_TOKEN aquí
 
       - name: Build and push Docker image
-        run: make publish VERSION=${{ steps.get_version.outputs.VERSION }}
+        run: make -C liberando-productos-practica-final publish VERSION=${{ steps.get_version.outputs.VERSION }}
+
