@@ -270,12 +270,9 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
 
   - Testing: tests unitarios con cobertura. --> ['Testing pipeline'](.github\workflows\test.yaml)
 
-  <p float="left">
-  <img src="Screenshots/6-pipelinetesting1.jpg" width="500" />
-  <img src="Screenshots/6-pipelinetesting2.jpg" width="500" /> 
-</p>
-
-  ![Pipelinetesting1](Screenshots/6-pipelinetesting1.jpg) ![Pipelinetesting2](Screenshots/6-pipelinetesting2.jpg)
+    ![Pipelinetesting1](Screenshots/6-pipelinetesting1.jpg)
+    ![Pipelinetesting2](Screenshots/6-pipelinetesting2.jpg)
+    
   - Build & Push: creación de imagen docker y push de la misma a cualquier registry válido que utilice alguna estrategia de release para los tags de las vistas en clase, se recomienda GHCR ya incluido en los repositorios de Github. Se dispone de un [ejemplo con Github Actions en el repositorio actual](./.github/workflows/release.yaml)
 
 - Configuración de monitorización y alertas:
