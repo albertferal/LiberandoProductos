@@ -293,6 +293,7 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
     - Este flujo de trabajo se encarga de construir una imagen Docker y publicarla en GHCR cada vez que se realiza un push con una etiqueta que comienza con 'v', tal como hemos mencionado anteriormente. Esto permite un proceso controlado de versionado y distribución de la imagen Docker asociada al proyecto.
 
     - Si todo funciona correctamente, en la sección Packages aparecerá el paquete Docker versionado y listo para su uso.
+    - Podremos hacer un pull de ese docker y luego un run del mismo en nuestra terminal.
 
       ![Packages](Screenshots/8-packages.jpg)
       ![Packages2](Screenshots/8-packages2.jpg)
