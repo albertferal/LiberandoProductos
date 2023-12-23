@@ -218,7 +218,7 @@ Comprobamos que todo el entorno funcione correctamente:
     ```sh
      python src/app.py
     ```
-    ![Endpoints](Screenshots\2-helloworld-health.jpg)
+    ![Endpoints](Screenshots/2-helloworld-health.jpg)
 
 4. Comprobamos las métricas de los 2 endpoints en http://localhost:8000/ haciendo varias peticiones vía curl.
 - Primeos podemos llamar al endpoint "/"
@@ -234,7 +234,7 @@ Comprobamos que todo el entorno funcione correctamente:
       'http://localhost:8081/health' \
       -H 'accept: application/json'
     ```
-    ![Métricas](Screenshots\3-logs.jpg)
+    ![Métricas](Screenshots/3-logs.jpg)
 
 5. Ejecutamos los tests de las 3 formas posibles (SIEMPRE DENTRO DEL ENTORNO VIRTUAL):
     ```sh
@@ -246,7 +246,7 @@ Comprobamos que todo el entorno funcione correctamente:
     ```sh
     pytest --cov --cov-report=html
     ```
-    ![Pytests](Screenshots\4-tests.jpg)
+    ![Pytests](Screenshots/4-tests.jpg)
 
 
 
@@ -259,7 +259,7 @@ Los requirimientos son los siguientes:
 
 - Creación de tests unitarios para el nuevo endpoint añadido, para ello será necesario modificar el [fichero de tests](./src/tests/app_test.py) 
 
-  ![PytestsNewEndpoint](Screenshots\5-testsnew.jpg)
+  ![PytestsNewEndpoint](Screenshots/5-testsnew.jpg)
 
 
 - Opcionalmente creación de helm chart para desplegar la aplicación en Kubernetes, se dispone de un ejemplo de ello en el laboratorio realizado en la clase 3
