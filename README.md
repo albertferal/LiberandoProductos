@@ -311,6 +311,15 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
   - Configurar monitorización mediante prometheus en los nuevos endpoints añadidos, por lo menos con la siguiente configuración:
     - Contador cada vez que se pasa por el/los nuevo/s endpoint/s, tal y como se ha realizado para los endpoints implementados inicialmente
 
+      - Para ello modificamos el archivo [`app.py`](liberando-productos-practica-final/src/application/app.py) añadiendo métricas para el endpoint "/bye"
+      - Comprobamos que funcionen llamando a dicho endpoint con curl:
+
+      ```sh
+        curl -X 'GET''http://localhost:8081/bye'-H 'accept: application/json'
+      ```
+
+      ![CounterBye](Screenshots/9-contadorbye.jpg)
+
   - Desplegar prometheus a través de Kubernetes mediante minikube y configurar alert-manager para por lo menos las siguientes alarmas, tal y como se ha realizado en el laboratorio del día 3 mediante el chart `kube-prometheus-stack`:
     - Uso de CPU de un contenedor mayor al del límite configurado, se puede utilizar como base el ejemplo utilizado en el laboratorio 3 para mandar alarmas cuando el contenedor de la aplicación `fast-api` consumía más del asignado mediante request
 
