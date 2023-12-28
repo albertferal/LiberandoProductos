@@ -317,6 +317,7 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
       ```sh
         curl -X 'GET''http://localhost:8081/bye'-H 'accept: application/json'
       ```
+      - En http://localhost:8000 deberíamos ver algo similar a esto:
 
       ![CounterBye](Screenshots/9-contadorbye.jpg)
 
@@ -324,6 +325,32 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
     - Uso de CPU de un contenedor mayor al del límite configurado, se puede utilizar como base el ejemplo utilizado en el laboratorio 3 para mandar alarmas cuando el contenedor de la aplicación `fast-api` consumía más del asignado mediante request
 
   - Las alarmas configuradas deberán tener severity high o critical
+
+          - alert: CPUUsageExceeds75Percent
+            expr: (sum(rate(container_cpu_usage_seconds_total{container!="",pod!=""}[5m]))
+            / sum (kube_pod_container_resource_limits_cpu_cores) * 100) > 75
+            for: 1m
+            labels:
+              severity: high
+            annotations:
+              summary: CPU Usage Exceeds 75%
+              description: "CPU usage in containers exceeds 75%"
+
+
+          - alert: CPUUsageExceedsLimit
+            expr: avg(container_cpu_usage_seconds_total{job="kubernetes-nodes"}) by (pod)
+            / avg(container_spec_cpu_quota{job="kubernetes-nodes"}) by (pod) * 100 > 100
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: CPU Usage Exceeds Limit ({{ $labels.instance }})
+              description: "CPU usage in container is above the configured limit"
+        
+    - Hemos añadido a [`values.yaml`](kube-prometheus-stack\values.yaml) de kube-prometheus-stack un par de reglas para que, cuando se cumplan, nos envíen notifiaciones en el canal de slack.
+      - La 1a regla es de severity "high", su función (expr), es calcular la tasa de uso de CPU promedio durante los últimos 5 minutos y lo compara con el límite del 75% de la capacidad total de CPU asignada a los contenedores.
+      - La 2a regla es de severity "critical", su función (expr), evalúa si el uso promedio de CPU en los contenedores supera el límite configurado del 100% de la capacidad asignada.
+
 
   - Crear canal en slack `<nombreAlumno>-prometheus-alarms` y configurar webhook entrante para envío de alertas con alert manager
 
@@ -346,3 +373,7 @@ Se deberá entregar mediante un repositorio realizado a partir del original lo s
 - Ficheros para CI/CD configurados y ejemplos de ejecución válidos
 - Ficheros para despliegue y configuración de prometheus de todo lo relacionado con este, así como el dashboard creado exportado a `JSON` para poder reproducirlo
 - `README.md` donde se explique como se ha abordado cada uno de los puntos requeridos en el apartado anterior, con ejemplos prácticos y guía para poder reproducir cada uno de ellos
+
+
+URL WEBHOOK:
+https://hooks.slack.com/services/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
