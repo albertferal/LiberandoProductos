@@ -374,6 +374,3 @@ Se deberá entregar mediante un repositorio realizado a partir del original lo s
 - Ficheros para despliegue y configuración de prometheus de todo lo relacionado con este, así como el dashboard creado exportado a `JSON` para poder reproducirlo
 - `README.md` donde se explique como se ha abordado cada uno de los puntos requeridos en el apartado anterior, con ejemplos prácticos y guía para poder reproducir cada uno de ellos
 
-
-URL WEBHOOK:
-https://hooks.slack.com/services/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
