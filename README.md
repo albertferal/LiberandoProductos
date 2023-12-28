@@ -347,7 +347,7 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
               summary: CPU Usage Exceeds Limit ({{ $labels.instance }})
               description: "CPU usage in container is above the configured limit"
         
-    - Hemos añadido a [`values.yaml`](kube-prometheus-stack\values.yaml) de kube-prometheus-stack un par de reglas para que, cuando se cumplan, nos envíen notifiaciones en el canal de slack.
+    - Hemos añadido a [`values.yaml`](kube-prometheus-stack/values.yaml) de kube-prometheus-stack un par de reglas para que, cuando se cumplan, nos envíen notifiaciones en el canal de slack.
       - La 1a regla es de severity "high", su función (expr), es calcular la tasa de uso de CPU promedio durante los últimos 5 minutos y lo compara con el límite del 75% de la capacidad total de CPU asignada a los contenedores.
       - La 2a regla es de severity "critical", su función (expr), evalúa si el uso promedio de CPU en los contenedores supera el límite configurado del 100% de la capacidad asignada.
 
