@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "liberando-productos.fullname" . }}
+  name: {{ include "fast-api-webapp.fullname" . }}
   labels:
-    {{- include "liberando-productos.labels" . | nindent 4 }}
+    {{- include "fast-api-webapp.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "liberando-productos.selectorLabels" . | nindent 6 }}
+      {{- include "fast-api-webapp.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,46 +18,53 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "liberando-productos.labels" . | nindent 8 }}
-	{{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        {{- include "fast-api-webapp.selectorLabels" . | nindent 8 }}
     spec:
+      {{- if ((.Values.imageCredentials).password) -}}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "liberando-productos.serviceAccountName" . }}
+      {{- end }}
+      serviceAccountName: {{ include "fast-api-webapp.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: wait-mongo
+          image: mongo:{{ .Values.mongodb.version }}
+          command: ['bin/bash']
+          args: ['-c', 'until [[ $(mongosh "${MONGODB_ADMIN_URL}" --quiet --eval "rs.status().ok") == 1 ]]; do echo waiting for mongodb to be ready; sleep 2; done']
+          envFrom:
+            - secretRef:
+                name: {{ include "fast-api-webapp.fullname" . }}-secret
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - secretRef:
+                name: {{ include "fast-api-webapp.fullname" . }}-secret
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+            {{- if .Values.metrics.enabled }}
+            - name: {{ .Values.metrics.svc.name }}
+              containerPort: {{ .Values.metrics.svc.port }}
+              protocol: TCP
+            {{- end }}
           livenessProbe:
             httpGet:
-              path: /
+              path: /health
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /health
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
-          volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.volumes }}
-      volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -3,7 +3,15 @@
 
 ## Objetivo
 
-El objetivo es mejorar un proyecto creado previamente para ponerlo en producción, a través de la adicción de una serie de mejoras.
+El objetivo es mejorar un proyecto creado previamente para ponerlo en producción, a través de la adicción de una serie de mejoras. 
+Secciones del proyecto:
+ - [Funcionamiento aplicación inicial, sin cambios ](#practica-a-realizar)
+ - [Inicio práctica](#mejorando-el-proyecto-inicio-de-la-práctica)
+ - [Endpoints](#endpoints)
+ - [Pipeline](#pipelines)
+ - [Monitoring](#monitoring-y-alertas)
+ - [Slack](#slack)
+ - [Grafana](#grafana)
 
 ## Proyecto inicial
 
@@ -237,6 +245,7 @@ Es posible ejecutar los tests de diferentes formas:
     ![Métricas](Screenshots/3-logs.jpg)
 
 5. Ejecutamos los tests de las 3 formas posibles (SIEMPRE DENTRO DEL ENTORNO VIRTUAL):
+
     ```sh
     pytest
     ```
@@ -253,6 +262,7 @@ Es posible ejecutar los tests de diferentes formas:
 Una vez comprobado todo y a partir de ello, es necesario realizar una serie de mejoras:
 
 ### Mejorando el proyecto (Inicio de la práctica)
+#### Endpoints
 
 - Añadir por lo menos un nuevo endpoint a los existentes `/` y `/health`, un ejemplo sería `/bye` que devolvería `{"msg": "Bye Bye"}`, para ello será necesario añadirlo en el fichero [src/application/app.py](./src/application/app.py)
   - Hemos añadido el endpoint `/bye`, el cual da un mensaje en http://localhost:8081/bye `{"msg": "Bye, have a nice day"}`
@@ -265,6 +275,8 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
 - Opcionalmente creación de helm chart para desplegar la aplicación en Kubernetes, se dispone de un ejemplo de ello en el laboratorio realizado en la clase 3
 
   - Acceso al helm chart --> [`LP-Chart`](LP-Chart/)
+
+#### Pipelines 
 
 - Creación de pipelines de CI/CD en cualquier plataforma (Github Actions, Jenkins, etc) que cuenten por lo menos con las siguientes fases:
 
@@ -306,6 +318,8 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
 
       - Es importante escribir bien el tag, en este caso la última versión publicada es la v1.0.12
 
+#### Monitoring y alertas
+
 - Configuración de monitorización y alertas:
 
   - Configurar monitorización mediante prometheus en los nuevos endpoints añadidos, por lo menos con la siguiente configuración:
@@ -321,8 +335,11 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
 
       ![CounterBye](Screenshots/9-contadorbye.jpg)
 
-  - Desplegar prometheus a través de Kubernetes mediante minikube y configurar alert-manager para por lo menos las siguientes alarmas, tal y como se ha realizado en el laboratorio del día 3 mediante el chart `kube-prometheus-stack`:
-    - Uso de CPU de un contenedor mayor al del límite configurado, se puede utilizar como base el ejemplo utilizado en el laboratorio 3 para mandar alarmas cuando el contenedor de la aplicación `fast-api` consumía más del asignado mediante request
+  - Desplegar prometheus a través de Kubernetes mediante minikube y configurar alert-manager para por lo menos las siguientes alarmas, tal y como se ha realizado en el laboratorio del día 3 mediante el chart `kube-prometheus-stack`.
+
+    - Para ello seguir los pasos de [Prometheus-minikube.md](Prometheus-minikube.md)
+
+  - Uso de CPU de un contenedor mayor al del límite configurado, se puede utilizar como base el ejemplo utilizado en el laboratorio 3 para mandar alarmas cuando el contenedor de la aplicación `fast-api` consumía más del asignado mediante request.
 
   - Las alarmas configuradas deberán tener severity high o critical
 
@@ -348,29 +365,39 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
               description: "CPU usage in container is above the configured limit"
         
     - Hemos añadido a [`values.yaml`](kube-prometheus-stack/values.yaml) de kube-prometheus-stack un par de reglas para que, cuando se cumplan, nos envíen notifiaciones en el canal de slack.
-      - La 1a regla es de severity "high", su función (expr), es calcular la tasa de uso de CPU promedio durante los últimos 5 minutos y lo compara con el límite del 75% de la capacidad total de CPU asignada a los contenedores.
-      - La 2a regla es de severity "critical", su función (expr), evalúa si el uso promedio de CPU en los contenedores supera el límite configurado del 100% de la capacidad asignada.
+      - La 1ª regla es de severity "high", su función (expr), es calcular la tasa de uso de CPU promedio durante los últimos 5 minutos y lo compara con el límite del 75% de la capacidad total de CPU asignada a los contenedores.
+      - La 2ª regla es de severity "critical", su función (expr), evalúa si el uso promedio de CPU en los contenedores supera el límite configurado del 100% de la capacidad asignada.
 
+#### Slack
 
-  - Crear canal en slack `<nombreAlumno>-prometheus-alarms` y configurar webhook entrante para envío de alertas con alert manager
+  - Crear canal en slack `<nombreAlumno>-prometheus-alarms` y configurar webhook entrante para envío de alertas con alert manager.
+
+    - ![Canal Slack](Screenshots/10-slack-helloworld.jpg)
 
   - Alert manager estará configurado para lo siguiente:
     - Mandar un mensaje a Slack en el canal configurado en el paso anterior con las alertas con label "severity" y "critical"
     - Deberán enviarse tanto alarmas como recuperación de las mismas
     - Habrá una plantilla configurada para el envío de alarmas
 
-    Para poder comprobar si esta parte funciona se recomienda realizar una prueba de estres, como la realizada en el laboratorio 3 a partir del paso 8.
+    Para poder comprobar si esta parte funciona se recomienda realizar una prueba de estres.
+
+#### Grafana
 
   - Creación de un dashboard de Grafana, con por lo menos lo siguiente:
     - Número de llamadas a los endpoints
     - Número de veces que la aplicación ha arrancado
 
-## Entregables
+    - Para ello es necesario el script [`custom_dashboard.json`](custom_dashboard.json). En él configuramos como queremos los gráficos de grafana y lo qué deseamos ver en ellos. En este caso el número de llamadas a los 3 endpoints, como se observa en la siguiente imagen:
 
-Se deberá entregar mediante un repositorio realizado a partir del original lo siguiente:
+    - ![Gráfico grafana](Screenshots/11-grafanaendpoints.jpg)
 
-- Código de la aplicación y los tests modificados
-- Ficheros para CI/CD configurados y ejemplos de ejecución válidos
-- Ficheros para despliegue y configuración de prometheus de todo lo relacionado con este, así como el dashboard creado exportado a `JSON` para poder reproducirlo
-- `README.md` donde se explique como se ha abordado cada uno de los puntos requeridos en el apartado anterior, con ejemplos prácticos y guía para poder reproducir cada uno de ellos
+     - localhost:8081/ --> Endpoint principal.
+     - localhost:8081/health --> Endpoint de healthcheck, el cual se va ejecutando automáticamente.
+     - localhost:8081/bye --> Endpoint añadido de despedida.
 
+
+<div align ="right">
+  <p></p>
+  <p>Albert Fernández Alcázar</p>
+  <p>DevOps 8ª edición - KeepCoding</p>
+</div>
