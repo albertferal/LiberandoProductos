@@ -10,7 +10,7 @@
         -p monitoring-project
     ```
 
-2. Modificar el fichero [kube-prometheus-stack/values.yaml](kube-prometheus-stack\values.yaml) añadiendo el canal al que se enviarán las alarmas, así como la URL del webhook configurado previamente en Slack.
+2. Modificar el fichero [kube-prometheus-stack/values.yaml](kube-prometheus-stack/values.yaml) añadiendo el canal al que se enviarán las alarmas, así como la URL del webhook configurado previamente en Slack.
 
 3. Añadir el repositorio de helm `prometheus-community` para poder desplegar el chart `kube-prometheus-stack`:
 
@@ -19,7 +19,7 @@
     helm repo update
     ```
 
-4. Desplegar el chart `kube-prometheus-stack` del repositorio de helm añadido en el paso anterior con los valores configurados en el archivo [kube-prometheus-stack/values.yaml](kube-prometheus-stack\values.yaml) en el namespace `monitoring`:
+4. Desplegar el chart `kube-prometheus-stack` del repositorio de helm añadido en el paso anterior con los valores configurados en el archivo [kube-prometheus-stack/values.yaml](kube-prometheus-stack/values.yaml) en el namespace `monitoring`:
 
     ```sh
     helm -n monitoring upgrade \
