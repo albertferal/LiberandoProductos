@@ -339,7 +339,7 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
 
     - Para ello seguir los pasos de [Prometheus-minikube.md](Prometheus-minikube.md)
 
-  - Uso de CPU de un contenedor mayor al del límite configurado, se puede utilizar como base el ejemplo utilizado en el laboratorio 3 para mandar alarmas cuando el contenedor de la aplicación `fast-api` consumía más del asignado mediante request.
+  - Uso de CPU de un contenedor mayor al del límite configurado para mandar alarmas cuando el contenedor de la aplicación `fast-api` consumía más del asignado mediante request.
 
   - Las alarmas configuradas deberán tener severity high o critical
 
@@ -367,19 +367,26 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
     - Hemos añadido a [`values.yaml`](kube-prometheus-stack/values.yaml) de kube-prometheus-stack un par de reglas para que, cuando se cumplan, nos envíen notifiaciones en el canal de slack.
       - La 1ª regla es de severity "high", su función (expr), es calcular la tasa de uso de CPU promedio durante los últimos 5 minutos y lo compara con el límite del 75% de la capacidad total de CPU asignada a los contenedores.
       - La 2ª regla es de severity "critical", su función (expr), evalúa si el uso promedio de CPU en los contenedores supera el límite configurado del 100% de la capacidad asignada.
+      - También añadimos el canal y el webhook donde se notificarán las alarmas. (El webhook debemos guardarlo en secrets ya que un webhook público queda totalmente invalidado por razones de seguridad)
 
 #### Slack
 
   - Crear canal en slack `<nombreAlumno>-prometheus-alarms` y configurar webhook entrante para envío de alertas con alert manager.
 
-    - ![Canal Slack](Screenshots/10-slack-helloworld.jpg)
+    - ![Canal Slack](Screenshots/10.1-slack-helloworld.jpg)
 
   - Alert manager estará configurado para lo siguiente:
     - Mandar un mensaje a Slack en el canal configurado en el paso anterior con las alertas con label "severity" y "critical"
     - Deberán enviarse tanto alarmas como recuperación de las mismas
     - Habrá una plantilla configurada para el envío de alarmas
 
-    Para poder comprobar si esta parte funciona se recomienda realizar una prueba de estres.
+    - ![Alarmas Slack](Screenshots/10.2-slack-alarms1.jpg)
+
+    - ![Grafana memory](Screenshots/10.4-grafana-memory-limits.jpg)
+
+    Para poder comprobar si esta parte funciona se recomienda realizar una prueba de estres. En este caso se ha usado el repo de [stress-ng](https://github.com/ColinIanKing/stress-ng). De este modo podemos aumentar el uso de CPU de nuestro pod.
+
+    - ![Stress-ng](Screenshots/10.3-stress.jpg)
 
 #### Grafana
 
