@@ -274,7 +274,7 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
 
 - Opcionalmente creación de helm chart para desplegar la aplicación en Kubernetes, se dispone de un ejemplo de ello en el laboratorio realizado en la clase 3
 
-  - Acceso al helm chart --> [`LP-Chart`](LP-Chart/)
+  - Acceso al helm chart --> ['Charts`](fast-api-webapp)
 
 #### Pipelines 
 
