@@ -264,10 +264,10 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
 ### Mejorando el proyecto (Inicio de la práctica)
 #### Endpoints
 
-- Añadir por lo menos un nuevo endpoint a los existentes `/` y `/health`, un ejemplo sería `/bye` que devolvería `{"msg": "Bye Bye"}`, para ello será necesario añadirlo en el fichero [src/application/app.py](./src/application/app.py)
+- Añadir por lo menos un nuevo endpoint a los existentes `/` y `/health`, un ejemplo sería `/bye` que devolvería `{"msg": "Bye Bye"}`, para ello será necesario añadirlo en el fichero [src/application/app.py](liberando-productos-practica-final/src/application/app.py)
   - Hemos añadido el endpoint `/bye`, el cual da un mensaje en http://localhost:8081/bye `{"msg": "Bye, have a nice day"}`
 
-- Creación de tests unitarios para el nuevo endpoint añadido, para ello será necesario modificar el [fichero de tests](./src/tests/app_test.py) 
+- Creación de tests unitarios para el nuevo endpoint añadido, para ello será necesario modificar el [fichero de tests](liberando-productos-practica-final/src/tests/app_test.py) 
 
   ![PytestsNewEndpoint](Screenshots/5-testsnew.jpg)
 
@@ -280,14 +280,14 @@ Una vez comprobado todo y a partir de ello, es necesario realizar una serie de m
 
 - Creación de pipelines de CI/CD en cualquier plataforma (Github Actions, Jenkins, etc) que cuenten por lo menos con las siguientes fases:
 
-  - Testing: tests unitarios con cobertura. --> ['Testing pipeline'](.github\workflows/test.yaml)
+  - Testing: tests unitarios con cobertura. --> ['Testing pipeline'](.github/workflows/test.yaml)
 
     - Este flujo de trabajo automatiza la ejecución de pruebas, el análisis de cobertura y la generación de un informe detallado de cobertura cada vez que se realiza un push en la rama main
 
     ![Pipelinetesting1](Screenshots/6-pipelinetesting1.jpg)
     ![Pipelinetesting2](Screenshots/6-pipelinetesting2.jpg)
     
-  - Build & Push: Creación de imagen docker y push de la misma a cualquier registry válido que utilice alguna estrategia de release para los tags de las vistas en clase, se recomienda GHCR ya incluido en los repositorios de Github. --> ['Build&Push pipeline'](.github\workflows/release.yaml)
+  - Build & Push: Creación de imagen docker y push de la misma a cualquier registry válido que utilice alguna estrategia de release para los tags de las vistas en clase, se recomienda GHCR ya incluido en los repositorios de Github. --> ['Build&Push pipeline'](.github/workflows/release.yaml)
     - Al hacer el commit, primero hay que guardar los cambios con un push normal.
     - Luego para taggear la version y que se ejecute el pipeline de release se deben usar los siguientes comandos: (Ejemplo si se quiere pasar a la versión 1.0.13).
 
