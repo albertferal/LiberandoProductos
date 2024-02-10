@@ -55,4 +55,4 @@ class SimpleServer:
         REQUESTS.inc()
         # Increment counter used for register the requests to bye endpoint
         BYE_ENDPOINT_REQUESTS.inc()
-        return {"msg": "Bye, have a nice day"}
+        return {"msg": "Bye, have a nice day Kleidy, te quiero drama queen"}
