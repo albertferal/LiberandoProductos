@@ -36,4 +36,4 @@ class TestSimpleServer:
         response = client.get("/bye")
 
         assert response.status_code == 200
-        assert response.json() == {"msg": "Bye, have a nice day"}
+        assert response.json() == {"msg": "Bye, have a nice day Kleidy, te quiero drama queen"}
